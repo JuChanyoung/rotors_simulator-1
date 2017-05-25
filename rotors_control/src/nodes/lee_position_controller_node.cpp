@@ -35,14 +35,14 @@ LeePositionControllerNode::LeePositionControllerNode() {
   cmd_pose_sub_ = nh.subscribe(
       mav_msgs::default_topics::COMMAND_POSE, 1,
       &LeePositionControllerNode::CommandPoseCallback, this);
-
+  //tbm: hover_example publish mav_msgs::default_topics::COMMAND_TRAJECTORY,this recieve it
   cmd_multi_dof_joint_trajectory_sub_ = nh.subscribe(
       mav_msgs::default_topics::COMMAND_TRAJECTORY, 1,
       &LeePositionControllerNode::MultiDofJointTrajectoryCallback, this);
 
   odometry_sub_ = nh.subscribe(mav_msgs::default_topics::ODOMETRY, 1,
                                &LeePositionControllerNode::OdometryCallback, this);
-
+  //tbm: after calculate the control command publish on topic below, and the controller_interface_plugin use gazebo_ros_interface_plugin to construct the corresponding ros topic to recieve the topic messages
   motor_velocity_reference_pub_ = nh.advertise<mav_msgs::Actuators>(
       mav_msgs::default_topics::COMMAND_ACTUATORS, 1);
 
@@ -112,7 +112,7 @@ void LeePositionControllerNode::CommandPoseCallback(
   lee_position_controller_.SetTrajectoryPoint(commands_.front());
   commands_.pop_front();
 }
-
+//tbm: this callback manage the hover_example publish message
 void LeePositionControllerNode::MultiDofJointTrajectoryCallback(
     const trajectory_msgs::MultiDOFJointTrajectoryConstPtr& msg) {
   // Clear all pending commands.

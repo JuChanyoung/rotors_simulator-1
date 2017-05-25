@@ -27,6 +27,8 @@
 #include <std_msgs/Header.h>
 #include <boost/bind.hpp>
 
+#include <ros/ros.h>
+
 namespace gazebo {
 
 GazeboRosInterfacePlugin::GazeboRosInterfacePlugin()
@@ -47,7 +49,8 @@ void GazeboRosInterfacePlugin::Load(physics::WorldPtr _world,
   if (kPrintOnPluginLoad) {
     gzdbg << __FUNCTION__ << "() called." << std::endl;
   }
-
+  ROS_INFO("1111111111111111111111111111111BBBBBBBB");
+  fprintf(stderr, "22222222222222\n" );
   /// \brief    Store the pointer to the model.
   world_ = _world;
 
@@ -292,6 +295,7 @@ void GazeboRosInterfacePlugin::GzConnectRosToGazeboTopicMsgCallback(
               gz_connect_ros_to_gazebo_topic_msg->gazebo_topic(), 1);
 
       // Create ROS subscriber.
+      //tbm: this is the place
       ros::Subscriber ros_subscriber =
           ros_node_handle_->subscribe<mav_msgs::Actuators>(
               gz_connect_ros_to_gazebo_topic_msg->ros_topic(), 1,

@@ -112,7 +112,7 @@ class stick_state(object):
         else:
             # Fill the entire bar
             for i in range(256):
-                if i <= self.emit_val:
+                if i >= self.emit_val:
                     # Fill green
                     if self.display_hor:
                         windowSurface.blit(self.display_bar_g,(self.display_width + i, self.display_height))
@@ -170,7 +170,7 @@ def main():
     pitch_stick = stick_state('Pitch', uinput.ABS_Y, K_UP, K_DOWN)
     pitch_stick.set_display(328, 198, False)
     sticks.append(pitch_stick)
-    thr_stick = stick_state('Throttle', uinput.ABS_THROTTLE, K_w, K_s, False)
+    thr_stick = stick_state('Throttle', uinput.ABS_THROTTLE, K_s,K_w,  True)
     thr_stick.set_display(328, 95, False)
     sticks.append(thr_stick)
     rud_stick = stick_state('Yaw', uinput.ABS_RUDDER, K_d, K_a)

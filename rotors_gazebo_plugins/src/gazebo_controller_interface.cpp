@@ -23,6 +23,7 @@
 
 #include "ConnectGazeboToRosTopic.pb.h"
 #include "ConnectRosToGazeboTopic.pb.h"
+#include "ros/ros.h"
 
 namespace gazebo {
 
@@ -175,7 +176,6 @@ void GazeboControllerInterface::CommandMotorCallback(
   for (int i = 0; i < actuators_msg->angular_velocities_size(); ++i) {
     input_reference_[i] = actuators_msg->angular_velocities(i);
   }
-
   // We have received a motor command reference (it may not be the first, but
   // this
   // does not matter)
