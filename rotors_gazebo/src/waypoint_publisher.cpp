@@ -78,10 +78,11 @@ int main(int argc, char** argv) {
            desired_position.x(),
            desired_position.y(),
            desired_position.z());
-  /*
+  
   trajectory_pub.publish(trajectory_msg);
 	ros::spin();
-  */
+  
+  /*
   ros::Rate loop_rate(1);
   while(ros::ok())
   {
@@ -90,5 +91,6 @@ int main(int argc, char** argv) {
       loop_rate.sleep();
       ROS_INFO_THROTTLE(1, "I am publishing \n");
   }
+  */
   return 0;
 }
