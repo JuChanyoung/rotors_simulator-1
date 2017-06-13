@@ -56,6 +56,7 @@ void LeePositionControllerNode::InitializeParams() {
   ros::NodeHandle pnh("~");
 
   // Read parameters from rosparam.
+  fprintf(stderr, "I am in LeePositionControllerNode::InitializeParams() \n" );
   GetRosParameter(pnh, "position_gain/x",
                   lee_position_controller_.controller_parameters_.position_gain_.x(),
                   &lee_position_controller_.controller_parameters_.position_gain_.x());
@@ -128,9 +129,11 @@ void LeePositionControllerNode::MultiDofJointTrajectoryCallback(
   }
 
   mav_msgs::EigenTrajectoryPoint eigen_reference;
+  //tbm:将tractory_msgs::MultiDOFJointTrajectory类型的消息msg中的tractory_msgs::MultiDOFJointTrajectoryPoint类型的point提取出来，赋值给mav_eigenTrajecotoryPoint类型的变量eigen_reference
   mav_msgs::eigenTrajectoryPointFromMsg(msg->points.front(), &eigen_reference);
+  //tbm:首先将第一个point转化并push进commands中
   commands_.push_front(eigen_reference);
-
+  //tbm:将给定的一系列point中时间之差赋值给command_waiting_times
   for (size_t i = 1; i < n_commands; ++i) {
     const trajectory_msgs::MultiDOFJointTrajectoryPoint& reference_before = msg->points[i-1];
     const trajectory_msgs::MultiDOFJointTrajectoryPoint& current_reference = msg->points[i];
@@ -140,18 +143,18 @@ void LeePositionControllerNode::MultiDofJointTrajectoryCallback(
     commands_.push_back(eigen_reference);
     command_waiting_times_.push_back(current_reference.time_from_start - reference_before.time_from_start);
   }
-
+  //tbm://将第一个轨迹点送给lee_position_controller
   // We can trigger the first command immediately.
   lee_position_controller_.SetTrajectoryPoint(commands_.front());
   commands_.pop_front();
-
+  //tbm:设置一个计时器，当等待时间等于两个命令点之间的时间差的时候就触发
   if (n_commands > 1) {
     command_timer_.setPeriod(command_waiting_times_.front());
     command_waiting_times_.pop_front();
     command_timer_.start();
   }
 }
-
+//tbm:这个就是计时器的回调函数，每当触发，取出commands_中的第一个命令送给lee_position_controller,并设置下一次计时器的触发时间
 void LeePositionControllerNode::TimedCommandCallback(const ros::TimerEvent& e) {
 
   if(commands_.empty()){
@@ -169,26 +172,29 @@ void LeePositionControllerNode::TimedCommandCallback(const ros::TimerEvent& e) {
     command_timer_.start();
   }
 }
-
+//tbm:LeePositionControllerNode位置控制器发送命令的频率取决于受到里程计消息的频率
 void LeePositionControllerNode::OdometryCallback(const nav_msgs::OdometryConstPtr& odometry_msg) {
 
   ROS_INFO_ONCE("LeePositionController got first odometry message.");
-
   EigenOdometry odometry;
+  //tbm:获得历程计消息后提取转化成EigenOdometry类型的变量
   eigenOdometryFromMsg(odometry_msg, &odometry);
+  //tbm:lee_position_controller对象将其赋值给自己内部存储的变量
   lee_position_controller_.SetOdometry(odometry);
 
   Eigen::VectorXd ref_rotor_velocities;
+  //tbm:计算螺旋桨的速度，将ref_rotor_velocities的引用作为参数传递
   lee_position_controller_.CalculateRotorVelocities(&ref_rotor_velocities);
 
+  //tbm:构造一个mav_msgs::Actuators类型的消息变量
   // Todo(ffurrer): Do this in the conversions header.
   mav_msgs::ActuatorsPtr actuator_msg(new mav_msgs::Actuators);
-
+  //tbm:将螺旋桨的参考速度ref_rotor_velocities赋值给消息便利那个中哦奴的angular_velocities域
   actuator_msg->angular_velocities.clear();
   for (int i = 0; i < ref_rotor_velocities.size(); i++)
     actuator_msg->angular_velocities.push_back(ref_rotor_velocities[i]);
   actuator_msg->header.stamp = odometry_msg->header.stamp;
-
+  //tbm:在话题上发布这个消息，话题的名字为mav_msgs::default_topics::COMMAND_ACTUATORS，去mav_comm包中找头文件可以找到
   motor_velocity_reference_pub_.publish(actuator_msg);
 }
 

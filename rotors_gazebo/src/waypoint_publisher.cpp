@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
                                    std::stof(args.at(3)));
 
   double desired_yaw = std::stof(args.at(4)) * DEG_2_RAD;
-
+	//tbm:这个MultiDofJointTrajectory轨迹中之定义一个点
   mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
       desired_yaw, &trajectory_msg);
 
@@ -78,7 +78,17 @@ int main(int argc, char** argv) {
            desired_position.x(),
            desired_position.y(),
            desired_position.z());
+  /*
   trajectory_pub.publish(trajectory_msg);
 	ros::spin();
+  */
+  ros::Rate loop_rate(1);
+  while(ros::ok())
+  {
+      trajectory_pub.publish(trajectory_msg);
+      ros::spinOnce();
+      loop_rate.sleep();
+      ROS_INFO_THROTTLE(1, "I am publishing \n");
+  }
   return 0;
 }

@@ -6,7 +6,7 @@
   <xacro:property name="rotor_velocity_slowdown_sim" value="10" />
   <xacro:property name="use_mesh_file" value="true" />
   <xacro:property name="mesh_file" value="package://rotors_description/meshes/iris.dae" />
-  <xacro:property name="mass" value="1.5" /> <!-- [kg] -->
+  <xacro:property name="mass" value="1.52001" /> <!-- [kg] -->
   <xacro:property name="body_width" value="0.47" /> <!-- [m] -->
   <xacro:property name="body_height" value="0.11" /> <!-- [m] -->
   <xacro:property name="mass_rotor" value="0.005" /> <!-- [kg] -->
@@ -138,5 +138,12 @@
     <origin xyz="-${arm_length_back_x} -${arm_length_back_y} ${rotor_offset_top}" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_rotor>
-
+	
+	  <xacro:arg name="addon_type" default="guidance" />
+  <xacro:arg name="addon_code" default="1" />
+  <xacro:arg name="addon_number" default="1" />
+	<!--
+		<xacro:include filename="$(find rotors_description)/urdf/erlecopter_addon.xacro" />
+  <xacro:erlecopter_addon addon_type="$(arg addon_type)" addon_code="$(arg addon_code)" addon_number="$(arg addon_number)" erlecopter_base_link="${namespace}/base_link_inertia" />
+	-->
 </robot>

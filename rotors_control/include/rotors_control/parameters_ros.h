@@ -22,6 +22,8 @@ template<typename T> inline void GetRosParameter(const ros::NodeHandle& nh,
 
 inline void GetRotorConfiguration(const ros::NodeHandle& nh,
                                   RotorConfiguration* rotor_configuration) {
+  fprintf(stderr, "I am in GetRotorConfiguration\n" );
+  fprintf(stderr, "I am in GetRotorConfiguration, nh.getNamespace = %s\n", nh.getNamespace().c_str() );
   std::map<std::string, double> single_rotor;
   std::string rotor_configuration_string = "rotor_configuration/";
   unsigned int i = 0;
@@ -29,6 +31,7 @@ inline void GetRotorConfiguration(const ros::NodeHandle& nh,
     if (i == 0) {
       rotor_configuration->rotors.clear();
     }
+    fprintf(stdout, "fuck you ################# rotor_configuration->rotors.size() = %d\n", rotor_configuration->rotors.size());
     Rotor rotor;
     nh.getParam(rotor_configuration_string + std::to_string(i) + "/angle",
                  rotor.angle);
@@ -71,6 +74,7 @@ inline void GetVehicleParameters(const ros::NodeHandle& nh, VehicleParameters* v
                   vehicle_parameters->inertia_(2, 2),
                   &vehicle_parameters->inertia_(2, 2));
   GetRotorConfiguration(nh, &vehicle_parameters->rotor_configuration_);
+  fprintf(stdout, "fuck you !!!!!!!!!!!!!!!!!!!!!! rotor_configuration_->rotors.size() = %d\n", vehicle_parameters->rotor_configuration_.rotors.size());
 }
 }
 

@@ -28,7 +28,7 @@ RollPitchYawrateThrustControllerNode::RollPitchYawrateThrustControllerNode() {
   InitializeParams();
 
   ros::NodeHandle nh;
-
+  //tbm:这里kDefaultCommandRollPitchYawrateThrustTopic其实是mav_msgs::default_topics::COMMAND_ROLL_PITCH_YAWRATE_THRUST,其实是command/roll_pitch_yawrate_thrust
   cmd_roll_pitch_yawrate_thrust_sub_ = nh.subscribe(kDefaultCommandRollPitchYawrateThrustTopic, 1,
                                      &RollPitchYawrateThrustControllerNode::RollPitchYawrateThrustCallback, this);
   odometry_sub_ = nh.subscribe(kDefaultOdometryTopic, 1,
@@ -75,7 +75,7 @@ void RollPitchYawrateThrustControllerNode::RollPitchYawrateThrustCallback(
   roll_pitch_yawrate_thrust_controller_.SetRollPitchYawrateThrust(roll_pitch_yawrate_thrust);
 }
 
-
+//tbm:不管是Lee_position_controller还是这个rollpitchYawrateThrustController都是要计算rotorvelocities
 void RollPitchYawrateThrustControllerNode::OdometryCallback(const nav_msgs::OdometryConstPtr& odometry_msg) {
 
   ROS_INFO_ONCE("RollPitchYawrateThrustController got first odometry message.");

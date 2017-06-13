@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+	<!-- this is good 
+	<xacro:include filename="/home/tbm/temp/test_urdf/test_conclusion_1/erlecopter_guidance_test_1.xacro" />
+	<xacro:include filename="/home/tbm/temp/test_urdf/test_conclusion_1/erlecopter_lidar_test_1.xacro" />
+	<xacro:include filename="/home/tbm/temp/test_urdf/test_conclusion_1/erlecopter_guidance_lidar_test_1.xacro" />
+	-->
+	<xacro:include filename="/home/tbm/temp/test_urdf/test_conclusion_2/erlecopter_guidance_test_1.xacro" />
+	<xacro:include filename="/home/tbm/temp/test_urdf/test_conclusion_2/erlecopter_lidar_test_1.xacro" />
+	<xacro:include filename="/home/tbm/temp/test_urdf/test_conclusion_2/erlecopter_guidance_lidar_test_1.xacro" />
+	
+	<xacro:macro name="erlecopter_addon" params="addon_type addon_code addon_number erlecopter_base_link" >
+		<!--
+		<xacro:property name="addon_file_directory" value="/home/tbm/temp/test_urdf/test_conclusion_1/" />
+		<xacro:property name="addon_file_name" value="erlecopter_$(arg addon_type)_test_1.xacro" /> 
+		-->
+		<!--
+		<xacro:unless value="${addon_code-1}">
+			<xacro:include filename="/home/tbm/temp/test_urdf/test_conclusion_1/erlecopter_guidance_test_1.xacro" />
+		</xacro:unless>
+		<xacro:unless value="${addon_code-2}">
+			<xacro:include filename="/home/tbm/temp/test_urdf/test_conclusion_1/erlecopter_lidar_test_1.xacro" />
+		</xacro:unless>
+		<xacro:unless value="${addon_code-3}">
+			<xacro:include filename="/home/tbm/temp/test_urdf/test_conclusion_1/erlecopter_guidance_lidar_test_1.xacro" />
+		</xacro:unless>
+		-->
+		
+		<xacro:unless value="${addon_code-1}">
+			<xacro:unless value="${addon_number-1}">
+				<xacro:erlecopter_guidance instance="1" erlecopter_base_link="${erlecopter_base_link}" />
+			</xacro:unless>
+			<xacro:unless value="${addon_number-2}">
+				<xacro:erlecopter_guidance instance="1" erlecopter_base_link="${erlecopter_base_link}" />
+			</xacro:unless>
+			<xacro:unless value="${addon_number-3}">
+				<xacro:erlecopter_guidance instance="1" erlecopter_base_link="${erlecopter_base_link}" />
+			</xacro:unless>
+			<xacro:unless value="${addon_number-4}">
+				<xacro:erlecopter_guidance instance="1" erlecopter_base_link="${erlecopter_base_link}" />
+			</xacro:unless>
+		</xacro:unless>
+		<xacro:unless value="${addon_code-2}">
+			<xacro:unless value="${addon_number-1}">
+				<xacro:erlecopter_lidar instance="1" erlecopter_base_link="${erlecopter_base_link}" />
+			</xacro:unless>
+			<xacro:unless value="${addon_number-2}">
+				<xacro:erlecopter_lidar instance="1" erlecopter_base_link="${erlecopter_base_link}" />
+				<xacro:erlecopter_lidar instance="2" erlecopter_base_link="${erlecopter_base_link}" />
+			</xacro:unless>
+			<xacro:unless value="${addon_number-3}">
+				<xacro:erlecopter_lidar instance="1" erlecopter_base_link="${erlecopter_base_link}" />
+				<xacro:erlecopter_lidar instance="2" erlecopter_base_link="${erlecopter_base_link}" />
+				<xacro:erlecopter_lidar instance="3" erlecopter_base_link="${erlecopter_base_link}" />
+			</xacro:unless>
+		</xacro:unless>
+		<xacro:unless value="${addon_code-3}">
+			<xacro:unless value="${addon_number-1}">
+				<xacro:erlecopter_guidance_lidar instance="1" erlecopter_base_link="${erlecopter_base_link}" />
+			</xacro:unless>
+			<xacro:unless value="${addon_number-2}">
+				<xacro:erlecopter_guidance_lidar instance="1" erlecopter_base_link="${erlecopter_base_link}" />
+			</xacro:unless>
+			<xacro:unless value="${addon_number-3}">
+				<xacro:erlecopter_guidance_lidar instance="1" erlecopter_base_link="${erlecopter_base_link}" />
+			</xacro:unless>
+			<xacro:unless value="${addon_number-4}">
+				<xacro:erlecopter_guidance_lidar instance="1" erlecopter_base_link="${erlecopter_base_link}" />
+			</xacro:unless>
+		</xacro:unless>
+		
+	</xacro:macro>
+</robot>
