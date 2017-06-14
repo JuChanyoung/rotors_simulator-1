@@ -27,6 +27,27 @@
 #include <ros/ros.h>
 #include <trajectory_msgs/MultiDOFJointTrajectory.h>
 
+#include <queue>
+
+void construct_trajectory(std::queue<trajectory_msgs::MultiDOFJointTrajectory>& traj_queue, std::vector<Eigen::Vector3d>& desired_positions, std::vector<double>& desired_yaws)
+{
+	trajectory_msgs::MultiDOFJointTrajectory trajectory_msg_temp;
+	desired_positions.emplace_back(2,0,1);
+	 desired_positions.emplace_back(2,2,1);
+	  desired_positions.emplace_back(0, 2,1);
+	  desired_positions.emplace_back(0,0,1);
+	  desired_yaws.emplace_back(0);
+	  desired_yaws.emplace_back(0);
+	  desired_yaws.emplace_back(0);
+	  desired_yaws.emplace_back(0);
+	  for (int i = 0; i < 4; i++)
+	  {
+		  mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_positions[i],
+		          desired_yaws[i], &trajectory_msg_temp);
+		  traj_queue.push(trajectory_msg_temp);
+	  }
+}
+
 int main(int argc, char** argv) {
 
   ros::init(argc, argv, "waypoint_publisher");
@@ -80,6 +101,23 @@ int main(int argc, char** argv) {
            desired_position.z());
   
   trajectory_pub.publish(trajectory_msg);
+
+  ros::Duration(5).sleep();
+
+  std::queue<trajectory_msgs::MultiDOFJointTrajectory> traj_queue;
+  std::vector<Eigen::Vector3d> desired_positions;
+  std::vector<double> desired_yaws;
+  construct_trajectory(traj_queue, desired_positions, desired_yaws);
+  trajectory_msgs::MultiDOFJointTrajectory trajectory_msg_temp;
+  ros::Rate loop_rate(0.5);
+  while(ros::ok() && !traj_queue.empty())
+  {
+	  trajectory_pub.publish(traj_queue.front());
+	  trajectory_msg_temp = traj_queue.front();
+	  traj_queue.pop();
+	  traj_queue.push(trajectory_msg_temp);
+	  loop_rate.sleep();
+  }
 	ros::spin();
   
   /*
